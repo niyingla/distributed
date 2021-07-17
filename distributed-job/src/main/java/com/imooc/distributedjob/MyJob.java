@@ -16,15 +16,15 @@ public class MyJob {
 
     //initialDelay 延迟启动
     //fixedDelay 固定延迟，时间间隔是前次任务的结束到下次任务的开始
-    //fixedRate 时间间隔是前次任务和下次任务的开始
-//    @Scheduled(fixedDelay = 3000, initialDelay = 5000)
+    //fixedRate 时间间隔是前次任务和下次任务的开始（小于执行时间时 等待完成立刻执行）
+    @Scheduled(fixedDelay = 3000, initialDelay = 5000)
     //crontab  https://cron.qqe2.com/
-//    @Scheduled(cron = "0,5 * * * * ?")
-//    public void process() throws InterruptedException {
-//        log.info("process....start");
-////        Thread.sleep(2000);
-////        log.info("process....stop");
-//    }
+    @Scheduled(cron = "0,5 * * * * ?")
+    public void process() throws InterruptedException {
+        log.info("process....start");
+//        Thread.sleep(2000);
+//        log.info("process....stop");
+    }
 
     @Scheduled(fixedRate = 3000)
     public void process1() throws InterruptedException {
@@ -33,11 +33,11 @@ public class MyJob {
         log.info("process1...stop");
     }
 
-//    @Scheduled(fixedRate = 3000)
-//    public void process2() throws InterruptedException {
-//        log.info("process2...start");
-//        Thread.sleep(5000);
-//        log.info("process2...stop");
-//    }
+    @Scheduled(fixedRate = 3000)
+    public void process2() throws InterruptedException {
+        log.info("process2...start");
+        Thread.sleep(5000);
+        log.info("process2...stop");
+    }
 
 }

@@ -9,7 +9,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 @SpringBootApplication
-//@EnableScheduling
+//全局开启定时 @Scheduled
+@EnableScheduling
+//开启异步
 @EnableAsync
 public class DistributedJobApplication {
 
@@ -17,6 +19,11 @@ public class DistributedJobApplication {
         SpringApplication.run(DistributedJobApplication.class, args);
     }
 
+    /**
+     * 防止task @Scheduled 单线程执行
+     * 此处设置线程池
+     * @return
+     */
     @Bean
     public TaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler taskScheduler = new ThreadPoolTaskScheduler();

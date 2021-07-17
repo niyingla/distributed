@@ -3,7 +3,10 @@ server:
 xxl:
   job:
     admin:
+      #服务地址
       addresses: http://localhost:8080/xxl-job-admin/
     executor:
+      #应用名
       appname: xxl-job-executor-sample
+      #日志目录
       logpath: /tmp/
