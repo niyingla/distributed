@@ -38,13 +38,15 @@ public class LoginIntercepter extends HandlerInterceptorAdapter {
         if (StringUtils.isEmpty(token)) {
             throw new RuntimeException("token为空");
         }
-
+        //拦截器解密
         Algorithm algorithm = Algorithm.HMAC256(JWT_KEY);
-        JWTVerifier verifier = JWT.require(algorithm)
-                .build(); //Reusable verifier instance
+        JWTVerifier verifier = JWT.require(algorithm).build(); //Reusable verifier instance
         try {
+            //放到请求属性 可以controller直接 @RequestAttribute 参数获取
             DecodedJWT jwt = verifier.verify(token);
+            //指定转出类型
             request.setAttribute(UID, jwt.getClaim(UID).asInt());
+            //指定转出类型
             request.setAttribute(LOGIN_USER, jwt.getClaim(LOGIN_USER).asString());
         }catch (TokenExpiredException e) {
             //token过期
@@ -53,7 +55,7 @@ public class LoginIntercepter extends HandlerInterceptorAdapter {
             //解码失败，token错误
             throw new RuntimeException("解码失败，token错误");
         }
-
+        //返回 true 表示不拦截 false 或者抛出异常不再往下执行 （被拦拦截了）
         return true;
     }
 }

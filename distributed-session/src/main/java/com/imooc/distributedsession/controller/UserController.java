@@ -22,6 +22,13 @@ import static com.imooc.distributedsession.LoginIntercepter.UID;
 @RestController
 public class UserController {
 
+    /**
+     * 分布式session
+     * 1 spring session 使用方式和速配那个
+     * 2 redis + token
+     * 3 jwt
+     */
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
@@ -56,19 +63,32 @@ public class UserController {
     @GetMapping("/loginWithJwt")
     public String loginWithJwt(@RequestParam String username,
                                @RequestParam String password) {
+        //获取密码 （通过加密key JWT_KEY 获取）
         Algorithm algorithm = Algorithm.HMAC256(JWT_KEY);
+        //创建token
         String token = JWT.create()
+                //指定字段
                 .withClaim("login_user", username)
                 .withClaim(UID, 1)
+                //指定过期时间
                 .withExpiresAt(new Date(System.currentTimeMillis() + 3600000))
                 .sign(algorithm);
         return token;
     }
 
+
     @GetMapping("/infoWithJwt")
-    public String infoWithJwt(@RequestAttribute String login_user) {
-        return login_user;
+    public String infoWithJwt(@RequestAttribute String token) {
+        //获取密码 （通过加密key JWT_KEY 获取）
+        Algorithm algorithm = Algorithm.HMAC256(JWT_KEY);
+        //获取解密对象
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        //解密
+        DecodedJWT decodedJWT = verifier.verify(token);
+        //返回数据体
+        return decodedJWT.getPayload();
     }
+
 
     //获取地址, token -> id
     @GetMapping("/address")

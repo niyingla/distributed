@@ -13,12 +13,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        //设置拦截地址
         registry.addInterceptor(loginIntercepter)
                 .addPathPatterns("/user/address")  //  /user/**
                 .addPathPatterns("/user/infoWithJwt");
 
 //        registry.addInterceptor(loginIntercepter)
 //                .addPathPatterns("/user/**")   //未登录的都会被拦截
-//                .excludePathPatterns("/user/login");
+//                .excludePathPatterns("/user/login");//不进行拦截
     }
 }
