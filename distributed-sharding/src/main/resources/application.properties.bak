@@ -1,37 +1,46 @@
+#分库分表数据库配置
 # 配置真实数据源
 spring.shardingsphere.datasource.names=ds0
 
+# 配置公共数据库账号密码
 spring.shardingsphere.datasource.common.type=com.zaxxer.hikari.HikariDataSource
 spring.shardingsphere.datasource.common.driver-class-name=com.mysql.jdbc.Driver
 spring.shardingsphere.datasource.common.username=root
 spring.shardingsphere.datasource.common.password= 123456
 
+#配置两个数据库地址
 spring.shardingsphere.datasource.ds0.jdbc-url=jdbc:mysql://localhost:3306/ds0?serverTimezone=UTC&useSSL=false
 #spring.shardingsphere.datasource.ds1.jdbc-url=jdbc:mysql://localhost:3306/ds1?serverTimezone=UTC&useSSL=false
 
-# 配置 t_order 表规则
+# 配置 t_order 表规则 真实数据节点，由数据源名 + 表名组成，以小数点分隔。多个表以逗号分隔，支持inline表达式。
 spring.shardingsphere.rules.sharding.tables.t_order.actual-data-nodes=ds0.t_order_$->{0..1}
 
-# 配置分库策略
+# 配置t_order分库策略 指定分库字段
 #spring.shardingsphere.rules.sharding.tables.t_order.database-strategy.standard.sharding-column=user_id
+# 指定分库策略 t_order
 #spring.shardingsphere.rules.sharding.tables.t_order.database-strategy.standard.sharding-algorithm-name=database-inline
 
-# 配置分表策略
+# 配置分表策略 t_order 指定分表字段
 spring.shardingsphere.rules.sharding.tables.t_order.table-strategy.standard.sharding-column=order_id
+# 指定分表策略 t_order
 spring.shardingsphere.rules.sharding.tables.t_order.table-strategy.standard.sharding-algorithm-name=table-inline
 
-# 配置 分片算法
+# 配置 库分片算法 database-inline
 #spring.shardingsphere.rules.sharding.sharding-algorithms.database-inline.type=INLINE
+# 指定分库表达式
 #spring.shardingsphere.rules.sharding.sharding-algorithms.database-inline.props.algorithm-expression=ds$->{user_id % 2}
+
+# 配置 表分片算法 table-inline
 spring.shardingsphere.rules.sharding.sharding-algorithms.table-inline.type=INLINE
+# 指定分表表达式
 spring.shardingsphere.rules.sharding.sharding-algorithms.table-inline.props.algorithm-expression=t_order_$->{order_id % 2}
 
-# 分布式序列策略配置
+# 分布式序列策略配置（order id 生成策略）
 spring.shardingsphere.rules.sharding.tables.t_order.key-generate-strategy.column=order_id
 spring.shardingsphere.rules.sharding.tables.t_order.key-generate-strategy.key-generator-name=snowflake
 
 # 分布式序列算法配置
 spring.shardingsphere.rules.sharding.key-generators.snowflake.type=SNOWFLAKE
 spring.shardingsphere.rules.sharding.key-generators.snowflake.props.worker-id=123
-
+# 展示sql
 spring.shardingsphere.props.sql-show=true
