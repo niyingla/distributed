@@ -10,6 +10,7 @@ spring:
 
   cloud:
     alibaba:
+      #seata中 项目名字
       seata:
         tx-service-group: seata-order
   application:
@@ -17,7 +18,9 @@ spring:
 
 seata:
   service:
+    #修改事务组名称为：seata-order，和客户端自定义的名称对应 default 就是 seata-order
     vgroup-mapping:
       seata-order: default
+    #指定seata 服务组地址
     grouplist:
       default: 127.0.0.1:8091

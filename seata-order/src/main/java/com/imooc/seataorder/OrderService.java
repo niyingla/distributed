@@ -15,17 +15,18 @@ public class OrderService {
     @Autowired
     private ProductFeignClient productFeignClient;
 
-//    @Autowired
-//    private RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
     @GlobalTransactional
     public Boolean create(Integer count) {
-        //调用product 扣库存
-//        String url = "http://localhost:8086/deduct?productId=5001&count=" + count;
-//        Boolean result = restTemplate.getForObject(url, Boolean.class);
+        //1 调用product 扣库存 注意不可以new RestTemplate
+        String url = "http://localhost:8086/deduct?productId=5001&count=" + count;
+        Boolean result = restTemplate.getForObject(url, Boolean.class);
 
-        Boolean result = productFeignClient.deduct(5001L, count);
-        if (result != null && result) {
+        //2 调用product 扣库存
+        Boolean result1 = productFeignClient.deduct(5001L, count);
+        if (result1 != null && result1) {
             //可能抛出异常
             if (5 == count) {
                 throw new RuntimeException("order发生异常了");
